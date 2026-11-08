@@ -24,6 +24,8 @@
   ({split.exportRows - split.total} export rows were repeats of the same id) ·
   <strong>{split.groups.length}</strong> problems
 </p>
+<p class="tags">Counted as the desk counts them: each report stays in the row of its cause. The one-day row
+lists the reports the desk read as a one-day move (desk-notes.json); they are counted under their cause too.</p>
 
 <table>
   <thead>
@@ -34,7 +36,7 @@
       {@const off = mistagged(g.problem, g.taggedAs)}
       <tr>
         <td><code>{g.problem}</code></td>
-        <td><strong>{g.reports.length}</strong></td>
+        <td><strong>{g.reports.length}</strong>{#if g.alsoCounted}<br /><span class="tags">also in their cause's row</span>{/if}</td>
         <td title={g.tenants.join(', ')}>{g.tenants.length}</td>
         <td class="tags">{tags(g.taggedAs)}{#if off}<br /><span class="off">{off} tagged as the other cause</span>{/if}</td>
         <td>{g.firstSeen} → {g.lastSeen}</td>
