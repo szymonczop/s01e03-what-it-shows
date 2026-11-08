@@ -1,0 +1,14 @@
+import { sveltekit } from '@sveltejs/kit/vite';
+import adapter from '@sveltejs/adapter-static';
+import { mdsvex } from 'mdsvex';
+export default {
+  plugins: [
+    sveltekit({
+      extensions: ['.svelte', '.svx'],
+      preprocess: [mdsvex({ extensions: ['.svx'], layout: { runbook: new URL('./src/lib/layouts/runbook.svelte', import.meta.url).pathname } })],
+      adapter: adapter({ strict: false }),
+      alias: { '#lib': 'src/lib' },
+      prerender: { entries: ['/kb', '/kb/incidents/4471', '/kb/incidents/4471/split', '/kb/triage/dedupe', '/kb/decisions/0001-dedupe-by-subject'], handleHttpError: 'warn' }
+    })
+  ]
+};

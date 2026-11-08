@@ -1,0 +1,71 @@
+---
+layout: runbook
+title: '#4471 split · three problems, not one'
+owner: support desk
+status: open
+reviewed: 2026-11-08
+signature: Szymon Czop
+---
+
+<script>
+  import SplitTable from '#lib/kb/SplitTable.svelte';
+  import CauseTable from '#lib/kb/CauseTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+
+  const repo = 'https://github.com/szymonczop/s01e03-what-it-shows/issues';
+  const issues = {
+    parser: { title: 'parser reads day-first dates month first', href: `${repo}/1` },
+    hint: { title: 'booking-v3 hint says MM/DD/YYYY', href: `${repo}/2` },
+    'one-day': { title: 'bookings move by one day', href: `${repo}/3` },
+  };
+</script>
+
+The [#4471 page](/kb/incidents/4471) calls this one known issue with one fix queued. When you read
+the reports themselves, they describe three problems. Two of them look the same from the desk, and
+the queued parser fix closes only one.
+
+<Callout kind="warn">
+Not one issue. Three tickets, three fixes. Fixing the parser leaves the other two open.
+</Callout>
+
+## What the reports say
+
+<SplitTable ticket={4471} {issues} />
+
+- **`parser`**: the shared parser reads every date month first, so a day-first tenant's
+  7 April comes out as 4 July. This hits every tenant on file and every channel.
+- **`hint`**: the `booking-v3` form prints `MM/DD/YYYY` under its date field, then reads the
+  date day first. People type what the hint says. The symptom is the same, but the cause and the
+  fix are different. Only form bookings at `booking-v3` tenants are affected.
+- **`one-day`**: the date moves by exactly one day, and day and month are not swapped. "Client in
+  Lisbon got Tuesday. Client in Toronto got Monday." This looks like a time zone bug. The desk
+  had already noted these reports in `desk-notes.json`.
+
+## Why they ended up in one ticket
+
+- [Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on subject line alone. All three
+  problems arrive with the same subjects ("Wrong date again", "Month and day swapped?"), so the
+  body was never read.
+- Intake's tag is guessed from the reporter's browser, not looked up from the tenant. It is wrong
+  in both directions, as the "intake tagged as" column shows. Count by tenant and form, as
+  `causes.ts` does, and not by tag.
+- The ticket export repeats some reports across its pages. Count each id once.
+
+## The table on the incident page, for comparison
+
+The incident page's own table (below) already finds `hint` but leaves it without a ticket. It
+also files the one-day moves under `parser` with a footnote.
+
+<CauseTable ticket={4471} />
+
+## What to do with #4471
+
+- Keep #4471 for the parser fix ([ticket](https://github.com/szymonczop/s01e03-what-it-shows/issues/1)).
+- Move the `booking-v3` form reports to their own ticket ([ticket](https://github.com/szymonczop/s01e03-what-it-shows/issues/2)).
+- Move the one-day moves to their own ticket ([ticket](https://github.com/szymonczop/s01e03-what-it-shows/issues/3)).
+  One reporter says they have stopped reporting these, so expect more than the export shows.
+- Decision 0001 should be replaced by a new record (decisions are never edited) that merges on
+  cause, not on subject.
+
+<RenderStamp {signature} />
