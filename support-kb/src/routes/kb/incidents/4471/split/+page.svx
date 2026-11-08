@@ -4,7 +4,7 @@ title: '#4471 split · three problems, not one'
 owner: support desk
 status: open
 reviewed: 2026-11-08
-signature: Szymon Czop
+signature: v1.eyJzdWIiOiIxNTUxOSIsImF1ZCI6ImNoYWxsZW5nZTp3aGF0LWl0LXNob3dzIiwiaWF0IjoxNzk0MTUyNTkxLCJleHAiOjE3OTQyMzg5OTF9.K6_G9nnXHpLl7t5ZlMOtw6HHFQgGW4FUGUrDLn2F5TY
 ---
 
 <script>
